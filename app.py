@@ -4,27 +4,31 @@ from polyglot.detect import Detector
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def hello():
     return 'hello world!'
 
+
 languageCodes = {
-    "zh":"zh-CN",
-    "zh_Hant":"zh-TW",
-    "zh_Hans":"zh-CN"
+    "zh": "zh-CN",
+    "zh_Hant": "zh-TW",
+    "zh_Hans": "zh-CN"
 }
+
 
 @app.route('/detect/<text>')
 def detect(text):
-    result = {'result':False}
+    result = {'result': False}
     try:
         detector = Detector(text)
         lc = detector.language.code
         fixCode = lc
-        if languageCodes.has_key(lc):
+        if languageCodes.get(lc):
             fixCode = languageCodes[lc]
-        
-        result = {'result':True, 'text':text,'language': detector.language.name, 'code':fixCode}
+
+        result = {'result': True, 'text': text,
+                  'language': detector.language.name, 'code': fixCode}
     except Exception as e:
         print(e)
     finally:
