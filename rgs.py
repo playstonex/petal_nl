@@ -40,8 +40,8 @@ def isMarch(text):
     for m in marchers:
         if m.isMatch(text) != None:
             print('%s is match %s' % (text, m.label))
-            return True
-    return False
+            return False
+    return True
 
 
 # a = 'guolei@me.com'
