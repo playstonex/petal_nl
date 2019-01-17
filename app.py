@@ -2,6 +2,8 @@ from flask import Flask
 from flask import jsonify
 from polyglot.detect import Detector
 
+import rgs
+
 app = Flask(__name__)
 
 
@@ -15,6 +17,12 @@ languageCodes = {
     "zh_Hant": "zh-TW",
     "zh_Hans": "zh-CN"
 }
+
+
+@app.route('/verify/<text>')
+def verify(text):
+    result = rgs.isMarch(text)
+    return jsonify({'result': result})
 
 
 @app.route('/detect/<text>')
