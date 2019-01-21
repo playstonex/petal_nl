@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import jsonify
+from flask import request
 from polyglot.detect import Detector
 
 import rgs
@@ -19,14 +20,21 @@ languageCodes = {
 }
 
 
-@app.route('/verify/<text>')
-def verify(text):
+@app.route('/verify', methods=['POST'])
+def verify():
+    json = request.get_json()
+    text = json['text']
+
     result = rgs.isMarch(text)
     return jsonify({'result': result})
 
 
-@app.route('/detect/<text>')
-def detect(text):
+@app.route('/detect', methods=['POST'])
+def detect():
+
+    json = request.get_json()
+    text = json['text']
+
     result = {'result': False}
     try:
         detector = Detector(text)

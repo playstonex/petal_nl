@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "/usr/local/opt/python/bin/python3.7",
+    "python.pythonPath": "/Users/lei/anaconda3/bin/python",
     "python.linting.pylintEnabled": true
 }
