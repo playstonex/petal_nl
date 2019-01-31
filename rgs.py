@@ -9,7 +9,7 @@ kURLRg = r'''^(https?:\/\/)? # match http or https
              \.([a-z\.]{2,6})         # match domain
              ([\/\w \.-]*)\/?$        # match api or file
              '''
-kNumberRg = '^[0-9]*$'
+kNumberRg = r'''^([0-9\s,-=\\\|\!\@\#\$\%\^\&\*\(\)\~])*$'''
 
 kIPRg = '((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))'
 
@@ -45,7 +45,7 @@ def isMarch(text):
 
 
 # a = 'guolei@me.com'
-# b = '13123234'
+# b = '13123234 123'
 # c = 'hello'
 # d = 'https://www.w3cschool.cn/regexp/m2ez1pqk.html'
 # e = 'playstone.org'
