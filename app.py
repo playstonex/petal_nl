@@ -1,11 +1,13 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-from polyglot.detect import Detector
+from pyfasttext import FastText
 
 import rgs
 
 app = Flask(__name__)
+
+model = FastText('lid.176.bin')
 
 
 @app.route('/')
@@ -22,11 +24,22 @@ languageCodes = {
 
 @app.route('/verify', methods=['POST'])
 def verify():
+    print('---------------------  Verify ------------------------')
     json = request.get_json()
+    #print(request.value)
+    print(json)
     text = json['text']
 
     result = rgs.isMarch(text)
-    return jsonify({'result': result})
+    if result == False:
+        return jsonify({'result': result})
+    else:
+        # name =  Guess().language_name(text)
+        print('------------ Lan name-----')
+        print(name)
+        return jsonify({'result': name == 'text'})
+
+
 
 
 @app.route('/detect', methods=['POST'])
@@ -37,14 +50,15 @@ def detect():
 
     result = {'result': False}
     try:
-        detector = Detector(text)
-        lc = detector.language.code
+        res = model.predict_proba_single(text, k=1)
+        
+        lc = res[0][0]
         fixCode = lc
         if languageCodes.get(lc):
             fixCode = languageCodes[lc]
 
         result = {'result': True, 'text': text,
-                  'language': detector.language.name, 'code': fixCode}
+                  'language': lc, 'code': fixCode}
     except Exception as e:
         print(e)
     finally:

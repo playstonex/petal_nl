@@ -3,17 +3,19 @@ FROM debian:latest
 
 # Update
 RUN apt-get update && apt-get install -y \
-    python\
-    python-pip\ 
-    libicu-dev\ 
-    python-numpy
+    python3\
+    python3-pip\ 
+    python-numpy\
+    wget
 
 # Install app dependencies
-RUN pip install polyglot flask gunicorn gevent
+RUN pip3 install pyfasttext flask gunicorn gevent
 
 WORKDIR /usr/src/app
 
 COPY ./* ./
+
+RUN wget https://www.dropbox.com/s/59l7vwm0u0vq58u/lid.176.bin\?dl\=0
 
 EXPOSE 8888
 
