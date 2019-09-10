@@ -46,12 +46,12 @@ def detect():
     print(text)
     result = {'result': False}
     try:
-        res = model.predict(text, k=1)
+        res = model.predict(text, k=3)
         print('---------- DETECT RESULT ------------')
         print(res)
         lc = res[0][0]
         if lc.startswith('__label__'):
-            lc = lc.strip('__label__')
+            lc = lc[len('__label__'):len(lc)]
         print(lc)
         fixCode = lc
         if languageCodes.get(lc):

@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+lid.176.bin
+
 # C extensions
 *.so
 
