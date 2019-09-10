@@ -6,11 +6,11 @@ RUN apt-get update && apt-get install -y \
     python3\
     python3-pip\ 
     python-numpy\
-    Cython\
     wget
 
 # Install app dependencies
-RUN pip3 install pyfasttext flask gunicorn gevent
+RUN pip3 install NumPy SciPy
+RUN pip3 install fasttext flask gunicorn gevent
 
 WORKDIR /usr/src/app
 

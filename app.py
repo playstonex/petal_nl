@@ -1,13 +1,13 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-from pyfasttext import FastText
+import fasttext
 
 import rgs
 
 app = Flask(__name__)
 
-model = FastText('lid.176.bin')
+model = fasttext.load_model('lid.176.bin')
 
 
 @app.route('/')
@@ -26,7 +26,7 @@ languageCodes = {
 def verify():
     print('---------------------  Verify ------------------------')
     json = request.get_json()
-    #print(request.value)
+    # print(request.value)
     print(json)
     text = json['text']
 
@@ -34,12 +34,7 @@ def verify():
     if result == False:
         return jsonify({'result': result})
     else:
-        # name =  Guess().language_name(text)
-        print('------------ Lan name-----')
-        print(name)
-        return jsonify({'result': name == 'text'})
-
-
+        return jsonify({'result':  True})
 
 
 @app.route('/detect', methods=['POST'])
@@ -47,12 +42,17 @@ def detect():
 
     json = request.get_json()
     text = json['text']
-
+    print('---------------- TEXT ----------')
+    print(text)
     result = {'result': False}
     try:
-        res = model.predict_proba_single(text, k=1)
-        
+        res = model.predict(text, k=1)
+        print('---------- DETECT RESULT ------------')
+        print(res)
         lc = res[0][0]
+        if lc.startswith('__label__'):
+            lc = lc.strip('__label__')
+        print(lc)
         fixCode = lc
         if languageCodes.get(lc):
             fixCode = languageCodes[lc]
