@@ -41,7 +41,23 @@ def verify():
 def detect():
 
     json = request.get_json()
+    keys = json.keys()
+    print(keys)
+
     text = json['text']
+    l1 = ''
+    if 'l1' in json:
+        l1 = json['l1']
+    l2 = ''
+    if 'l2' in json:
+        l2 = json['l2']
+
+    if languageCodes.get(l1):
+        l1 = languageCodes[l1]
+
+    if languageCodes.get(l2):
+        l2 = languageCodes[l2]
+
     print('---------------- TEXT ----------')
     print(text)
     result = {'result': False}
@@ -49,16 +65,32 @@ def detect():
         res = model.predict(text, k=3)
         print('---------- DETECT RESULT ------------')
         print(res)
-        lc = res[0][0]
-        if lc.startswith('__label__'):
-            lc = lc[len('__label__'):len(lc)]
-        print(lc)
-        fixCode = lc
-        if languageCodes.get(lc):
-            fixCode = languageCodes[lc]
+        detectLanguage = ''
+
+        dls = []
+        for dl in res[0]:
+            if dl.startswith('__label__'):
+                l = dl[len('__label__'):len(dl)]
+                if languageCodes.get(l):
+                    l = languageCodes[l]
+                dls.append(l)
+
+        for dl in dls:
+            if dl == l1:
+                detectLanguage = dl
+                break
+
+        if detectLanguage == '':
+            for dl in dls:
+                if dl == l2:
+                    detectLanguage = dl
+                    break
+
+        if detectLanguage == '':
+            detectLanguage = dls[0]
 
         result = {'result': True, 'text': text,
-                  'language': lc, 'code': fixCode}
+                  'language': detectLanguage, 'code': detectLanguage}
     except Exception as e:
         print(e)
     finally:
