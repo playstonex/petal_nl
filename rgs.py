@@ -1,6 +1,6 @@
+
+# -*- coding: utf-8 -*-
 import re
-
-
 kEmailRg = r'\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}'
 kDomainRg = r'[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+/.?'
 

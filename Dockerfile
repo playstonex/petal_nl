@@ -16,7 +16,7 @@ WORKDIR /usr/src/app
 
 COPY ./* ./
 
-RUN wget https://www.dropbox.com/s/59l7vwm0u0vq58u/lid.176.bin\?dl\=0
+RUN wget https://www.dropbox.com/s/59l7vwm0u0vq58u/lid.176.bin
 
 EXPOSE 8888
 
