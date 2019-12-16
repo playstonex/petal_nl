@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install app dependencies
 RUN pip3 install NumPy SciPy
-RUN pip3 install fasttext flask gunicorn gevent
+RUN pip3 install fasttext flask gunicorn gevent hanziconv
 
 WORKDIR /usr/src/app
 
