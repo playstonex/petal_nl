@@ -2,7 +2,7 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-from hanziconv import HanziConv
+from zhconv import convert
 import fasttext
 
 import rgs
@@ -44,12 +44,16 @@ def verify():
 def chineseconvert():
     json = request.get_json()
     text = json['text']
-    to = json['to']
+    # to = json['to']
     result = text
-    if to == 'zh-CN':
-        result = HanziConv.toSimplified(text)
+    simpleText = convert(text, 'zh-cn')
+
+    if simpleText == text:
+        result = convert(text, 'zh-tw')
     else:
-        result = HanziConv.toTraditional(text)
+        result = simpleText
+        
+    print(result)
     return jsonify({'result': result})
 
 
@@ -113,6 +117,7 @@ def detect():
         pass
 
     return jsonify(result)
+
 
 
 if __name__ == '__main__':
