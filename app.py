@@ -4,6 +4,7 @@ from flask import jsonify
 from flask import request
 from zhconv import convert
 import fasttext
+from datetime import datetime
 
 import rgs
 
@@ -32,7 +33,11 @@ def verify():
     print(json)
     text = json['text']
 
+    time1 = datetime.now()
     result = rgs.isMarch(text)
+    time2 = datetime.now()
+    print('-------------- VERIFY USE TIME -----------')
+    print((time2 - time1).microseconds)
     if result == False:
         return jsonify({'result': result})
     else:
@@ -42,6 +47,7 @@ def verify():
 # simplified and traditional convert
 @app.route('/chineseconvert', methods=['POST'])
 def chineseconvert():
+
     json = request.get_json()
     text = json['text']
     # to = json['to']
@@ -78,11 +84,19 @@ def detect():
     if languageCodes.get(l2):
         l2 = languageCodes[l2]
 
+    if len(text) > 100:
+        text = text[0:99]
+
     print('---------------- TEXT ----------')
     print(text)
     result = {'result': False}
     try:
+        time1 = datetime.now()
         res = model.predict(text, k=3)
+        time2 = datetime.now()
+        print('---------- DETECT USE TIME ----------')
+        print((time2 - time1).microseconds)
+
         print('---------- DETECT RESULT ------------')
         print(res)
         detectLanguage = ''
@@ -108,6 +122,11 @@ def detect():
 
         if detectLanguage == '':
             detectLanguage = dls[0]
+
+        # if  detectLanguage == 'zh-CH':
+        #     simpleText = convert(text, 'zh-cn')
+        #     if text != simpleText:
+        #         detectLanguage = 'zh-TW'
 
         result = {'result': True, 'text': text,
                   'language': detectLanguage, 'code': detectLanguage}
