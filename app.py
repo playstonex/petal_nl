@@ -63,6 +63,24 @@ def chineseconvert():
     return jsonify({'result': result})
 
 
+@app.route('/chinese', methods=['POST'])
+def chinese():
+
+    json = request.get_json()
+    text = json['text']
+    to = json['to']
+    result = text
+    # simpleText = convert(text, 'zh-cn')
+
+    if to == 'zh-CN':
+        result = convert(text, 'zh-cn')
+    else:
+        result = convert(text, 'zh-tw')
+        
+    print(result) 
+    return jsonify({'result': result})
+
+
 @app.route('/detect', methods=['POST'])
 def detect():
 
@@ -123,10 +141,10 @@ def detect():
         if detectLanguage == '':
             detectLanguage = dls[0]
 
-        # if  detectLanguage == 'zh-CH':
-        #     simpleText = convert(text, 'zh-cn')
-        #     if text != simpleText:
-        #         detectLanguage = 'zh-TW'
+        if  detectLanguage == 'zh-CN':
+            simpleText = convert(text, 'zh-cn')
+            if text != simpleText:
+                detectLanguage = 'zh-TW'
 
         result = {'result': True, 'text': text,
                   'language': detectLanguage, 'code': detectLanguage}
