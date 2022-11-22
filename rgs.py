@@ -44,6 +44,10 @@ def isMarch(text):
     return False
 
 
+f = lambda x='ddd': sum(
+    [1 if u'\u4e00' <= i <= u'\u9fff' else 0 for i in x]) > 0
+
+
 def delete_boring_characters(sentence):
     return re.sub('[0-9’!"#$%&\'()*+,-./:;<=>?@★、…【】《》？“”‘’！[\\]^_`{|}~\s]+', "", sentence)
 
@@ -51,31 +55,33 @@ def delete_boring_characters(sentence):
 def is_normal_text(text):
     pure_text = delete_boring_characters(text)
     pure_text_rate = len(pure_text) / len(text)
+    if f(text):
+        return pure_text_rate > 0.4
     if " " in text or '\n' in text:
         return pure_text_rate > 0.70
     else:
         return pure_text_rate > 0.80
 
 
-a = 'guolei@me.com'
-b = '13123234 123'
-c = 'hello'
-d = 'https://www.w3cschool.cn/regexp/m2ez1pqk.html'
-e = 'playstone.org'
-f = '12.3.4.1'
-g = '<img src="/img">'
+# a = 'guolei@me.com'
+# b = '13123234 123'
+# c = 'hello'
+# d = 'https://www.w3cschool.cn/regexp/m2ez1pqk.html'
+# e = 'playstone.org'
+# f = '12.3.4.1'
+# g = '<img src="/img">'
 
-ra = isMarch(a)
-print(ra)
-rb = isMarch(b)
-print(rb)
-rc = isMarch(c)
-print(rc)
-rd = isMarch(d)
-print(rd)
-rg = isMarch(e)
-print(rg)
-rg = isMarch(f)
-print(rg)
-rg = isMarch(g)
-print(rg)
+# ra = isMarch(a)
+# print(ra)
+# rb = isMarch(b)
+# print(rb)
+# rc = isMarch(c)
+# print(rc)
+# rd = isMarch(d)
+# print(rd)
+# rg = isMarch(e)
+# print(rg)
+# rg = isMarch(f)
+# print(rg)
+# rg = isMarch(g)
+# print(rg)
