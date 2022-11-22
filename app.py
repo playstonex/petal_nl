@@ -32,19 +32,18 @@ def verify():
     # print(request.value)
     print(json)
     text = json['text']
-
     time1 = datetime.now()
-    result = rgs.isMarch(text)
+    isNormal = not rgs.isMarch(text)
+    if isNormal:
+        isNormal = rgs.is_normal_text(text=text)
     time2 = datetime.now()
     print('-------------- VERIFY USE TIME -----------')
     print((time2 - time1).microseconds)
-    if result == False:
-        return jsonify({'result': result})
-    else:
-        return jsonify({'result':  True})
-
+    return jsonify({'result': isNormal})
 
 # simplified and traditional convert
+
+
 @app.route('/chineseconvert', methods=['POST'])
 def chineseconvert():
 
@@ -58,7 +57,7 @@ def chineseconvert():
         result = convert(text, 'zh-tw')
     else:
         result = simpleText
-        
+
     print(result)
     return jsonify({'result': result})
 
@@ -76,8 +75,8 @@ def chinese():
         result = convert(text, 'zh-cn')
     else:
         result = convert(text, 'zh-tw')
-        
-    print(result) 
+
+    print(result)
     return jsonify({'result': result})
 
 
@@ -141,7 +140,7 @@ def detect():
         if detectLanguage == '':
             detectLanguage = dls[0]
 
-        if  detectLanguage == 'zh-CN':
+        if detectLanguage == 'zh-CN':
             simpleText = convert(text, 'zh-cn')
             if text != simpleText:
                 detectLanguage = 'zh-TW'
@@ -154,7 +153,6 @@ def detect():
         pass
 
     return jsonify(result)
-
 
 
 if __name__ == '__main__':

@@ -40,29 +40,42 @@ def isMarch(text):
     for m in marchers:
         if m.isMatch(text) != None:
             print('%s is match %s' % (text, m.label))
-            return False
-    return True
+            return True
+    return False
 
 
-# a = 'guolei@me.com'
-# b = '13123234 123'
-# c = 'hello'
-# d = 'https://www.w3cschool.cn/regexp/m2ez1pqk.html'
-# e = 'playstone.org'
-# f = '12.3.4.1'
-# g = '<img src="/img">'
+def delete_boring_characters(sentence):
+    return re.sub('[0-9’!"#$%&\'()*+,-./:;<=>?@★、…【】《》？“”‘’！[\\]^_`{|}~\s]+', "", sentence)
 
-# ra = isMarch(a)
-# print(ra)
-# rb = isMarch(b)
-# print(rb)
-# rc = isMarch(c)
-# print(rc)
-# rd = isMarch(d)
-# print(rd)
-# rg = isMarch(e)
-# print(rg)
-# rg = isMarch(f)
-# print(rg)
-# rg = isMarch(g)
-# print(rg)
+
+def is_normal_text(text):
+    pure_text = delete_boring_characters(text)
+    pure_text_rate = len(pure_text) / len(text)
+    if " " in text or '\n' in text:
+        return pure_text_rate > 0.70
+    else:
+        return pure_text_rate > 0.80
+
+
+a = 'guolei@me.com'
+b = '13123234 123'
+c = 'hello'
+d = 'https://www.w3cschool.cn/regexp/m2ez1pqk.html'
+e = 'playstone.org'
+f = '12.3.4.1'
+g = '<img src="/img">'
+
+ra = isMarch(a)
+print(ra)
+rb = isMarch(b)
+print(rb)
+rc = isMarch(c)
+print(rc)
+rd = isMarch(d)
+print(rd)
+rg = isMarch(e)
+print(rg)
+rg = isMarch(f)
+print(rg)
+rg = isMarch(g)
+print(rg)
