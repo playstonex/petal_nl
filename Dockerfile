@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip
 
 # Install app dependencies
-RUN pip3 install flask gunicorn gevent zhconv fastlid hanzidentifier
+RUN pip3 install flask gunicorn gevent zhconv fasttext fastlid hanzidentifier
 
 WORKDIR /usr/src/app
 
