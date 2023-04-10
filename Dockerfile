@@ -4,19 +4,14 @@ FROM debian:latest
 # Update
 RUN apt-get update && apt-get install -y \
     python3\
-    python3-pip\ 
-    python-numpy\
-    wget
+    python3-pip
 
 # Install app dependencies
-RUN pip3 install NumPy SciPy
-RUN pip3 install fasttext flask gunicorn gevent zhconv
+RUN pip3 install flask gunicorn gevent zhconv fastlid hanzidentifier
 
 WORKDIR /usr/src/app
 
 COPY ./* ./
-
-# RUN wget https://www.dropbox.com/s/59l7vwm0u0vq58u/lid.176.bin
 
 EXPOSE 8888
 

@@ -2,15 +2,14 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-from zhconv import convert
-import fasttext
+from zhconv import convert, issimp
+from fastlid import fastlid
+import hanzidentifier
 from datetime import datetime
 
 import rgs
 
 app = Flask(__name__)
-
-model = fasttext.load_model('lid.176.bin')
 
 
 @app.route('/')
@@ -95,12 +94,8 @@ def detect():
     if 'l2' in json:
         l2 = json['l2']
 
-    if languageCodes.get(l1):
-        l1 = languageCodes[l1]
-
-    if languageCodes.get(l2):
-        l2 = languageCodes[l2]
-
+    l1 = 'zh' if 'zh' in l1 else l1
+    l2 = 'zh' if 'zh' in l2 else l2
     if len(text) > 100:
         text = text[0:99]
 
@@ -109,41 +104,28 @@ def detect():
     result = {'result': False}
     try:
         time1 = datetime.now()
-        res = model.predict(text, k=3)
+        ls = []
+        if len(l1) > 0:
+            ls.append(l1)
+        if len(l2) > 0:
+            ls.append(l2)
+
+        if len(ls) > 0:
+            fastlid.set_languages = ls
+        else:
+            fastlid.set_languages = None
+        res = fastlid(text, k=3)
+        # res = model.predict(text, k=3)
         time2 = datetime.now()
         print('---------- DETECT USE TIME ----------')
         print((time2 - time1).microseconds)
 
         print('---------- DETECT RESULT ------------')
         print(res)
-        detectLanguage = ''
-
-        dls = []
-        for dl in res[0]:
-            if dl.startswith('__label__'):
-                l = dl[len('__label__'):len(dl)]
-                if languageCodes.get(l):
-                    l = languageCodes[l]
-                dls.append(l)
-
-        for dl in dls:
-            if dl == l1:
-                detectLanguage = dl
-                break
-
-        if detectLanguage == '':
-            for dl in dls:
-                if dl == l2:
-                    detectLanguage = dl
-                    break
-
-        if detectLanguage == '':
-            detectLanguage = dls[0]
-
-        if detectLanguage == 'zh-CN':
-            simpleText = convert(text, 'zh-cn')
-            if text != simpleText:
-                detectLanguage = 'zh-TW'
+        detectLanguage = res[0][0] if type(res[0]) is list else res[0]
+        if detectLanguage == 'zh':
+            detectLanguage = 'zh_CN' if hanzidentifier.is_simplified(
+                text) else 'zh_TW'
 
         result = {'result': True, 'text': text,
                   'language': detectLanguage, 'code': detectLanguage}

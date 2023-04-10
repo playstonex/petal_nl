@@ -2,4 +2,5 @@ flask
 gunicorn
 gevent
 zhconv
-fasttext
+fastlid
+hanzidentifier
